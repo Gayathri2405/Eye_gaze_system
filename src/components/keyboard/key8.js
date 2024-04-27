@@ -1,3 +1,5 @@
+
+
 // Copyright 2023 MediaPipe & Malgorzata Pick
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
@@ -17,7 +19,7 @@ import { drawConnectors } from "@mediapipe/drawing_utils";
 import Info from "../../components/info/Info";
 // import InfoIcon from "../../components/infoIcon/InfoIcon";
 
-const WebcamImg = () => {
+const Key8 = () => {
   // Global settings
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -40,11 +42,10 @@ const WebcamImg = () => {
   const [gazingLeftTimer, setGazingLeftTimer] = useState(null);
   const location = useLocation();
   const currentRoute = location.pathname;
-
   // Define arrays of alphabet keys for the first and second blocks
-  const firstBlockKeys = "ABCDEFGHIJKLM".split("");
-  const secondBlockKeys = "NOPQRSTUVWXYZ".split("");
-  const firstBlock1Keys = "ABCDEF".split("");
+  const firstBlockKeys = "G".split("");
+  const secondBlockKeys = "HI".split("");
+ /* const firstBlock1Keys = "ABCDEF".split("");
   const secondBlock1Keys = "GHIJKLM".split("");
   const firstBlock2Keys = "NOPQRS".split("");
   const secondBlock2Keys = "TUVWXYZ".split("");
@@ -53,7 +54,7 @@ const WebcamImg = () => {
   const firstBlock4Keys = "A".split("");
   const secondBlock4Keys = "BC".split("");
   const firstBlock5Keys = "A".split("");
-  const secondBlock5Keys = "";
+  const secondBlock5Keys = "";*/
 
   let width = 84.0;
   let height = 88.0;
@@ -286,11 +287,11 @@ const WebcamImg = () => {
         
         
                 // Display distances between inner and outer corners and pupils for the left eye
-                console.log('Inner Corner to Pupil Distance - Left Eye:', innerCornerDistanceLeft.toFixed(4));
-                console.log('Outer Corner to Pupil Distance - Left Eye:', outerCornerDistanceLeft.toFixed(4));
+                console.log('Inner Corner to Pupil Distance - Left Eye:', innerCornerDistanceLeft.toFixed(2));
+                console.log('Outer Corner to Pupil Distance - Left Eye:', outerCornerDistanceLeft.toFixed(2));
                 
                 // Set a tolerance level for the equality check
-                const tolerance = 0.1542; // Modify the tolerance level as needed
+                const tolerance = 0.2542; // Modify the tolerance level as needed
                 // Check if the distances are approximately equal within the tolerance
 
         let positionIndicator = '';
@@ -308,25 +309,17 @@ const WebcamImg = () => {
           positionIndicator = 'Left';
 
         }
-
-        if (positionIndicator === 'Left' && currentRoute !== '/communication') {
+        if (positionIndicator === 'Left' && currentRoute !== '/browser') {
           const timer = setTimeout(() => {
-            navigate('/communication');
-          }, 5000);
+            navigate('/browser', { state: { letter: 'G' } });
+          }, 2000);
           setGazingLeftTimer(timer);
-        } else if (positionIndicator === 'Right' && currentRoute !== '/gaming') {
+        } else if (positionIndicator === 'Right' && currentRoute !== '/key13') {
           const timer = setTimeout(() => {
-            navigate('/gaming');
-          }, 5000);
-          setGazingRightTimer(timer);
-        }else if (positionIndicator === 'Center' && currentRoute !== '/browser') {
-          const timer = setTimeout(() => {
-            navigate('/browser');
-          }, 5000);
+            navigate('/key13');
+          }, 2000);
           setGazingRightTimer(timer);
         }
-   
-
 
 
         // Inside the useEffect hook after the calculation of pupillary distance
@@ -337,8 +330,8 @@ const WebcamImg = () => {
             
                 // Inside the useEffect hook after the calculation of pupillary distance
                   // Inside the useEffect hook after the calculation of pupillary distance
-                document.getElementById('innerCornerLeftEye').textContent = `Distance: ${innerCornerDistanceLeft.toFixed(4)}`;
-                document.getElementById('outerCornerLeftEye').textContent = `Distance: ${outerCornerDistanceLeft.toFixed(4)}`;
+                document.getElementById('innerCornerLeftEye').textContent = `Distance: ${innerCornerDistanceLeft.toFixed(2)}`;
+                document.getElementById('outerCornerLeftEye').textContent = `Distance: ${outerCornerDistanceLeft.toFixed(2)}`;
         
                 
 
@@ -395,8 +388,9 @@ const WebcamImg = () => {
       camera.start();
       document.querySelector(".container-img").style.display = "none";
     }
-    return () => {};
-  }, [imgSrc, height, width, deviceWidth]);
+    return () => { clearTimeout(gazingRightTimer);
+      clearTimeout(gazingLeftTimer);};
+  }, [imgSrc, height, width, deviceWidth,positionIndicator, navigate, currentRoute]);
 
   useEffect(() => {}, [numbersList, PDResult]);
 
@@ -434,7 +428,32 @@ const WebcamImg = () => {
   };
 
 
+  const Keyboard = () => {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-around', margin: '50px' }}>
+      {/* First rectangular block (A to M) */}
+      <div style={{ border: '1px solid black', padding: '10px' }}>
+        {firstBlockKeys.map((key, index) => (
+          <button key={index} style={{ margin: '5px' }} onClick={() => handleButtonClick(key)}>
+            {key}
+          </button>
+        ))}
+      </div>
+      {/* Second rectangular block (N to Z) */}
+      <div style={{ border: '1px solid black', padding: '10px' }}>
+        {secondBlockKeys.map((key, index) => (
+          <button key={index} style={{ margin: '5px' }} onClick={() => handleButtonClick(key)}>
+            {key}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
   
+  
+
   // Function to reset image source and showing back video section
   const resetPhoto = () => {
     setImgSrc(null);
@@ -471,39 +490,40 @@ const WebcamImg = () => {
 
   // DOM elements which shows depending on what's happening in app
   return (
+    
     <Fragment>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {/* Your Communication page content goes here */}
+      <h1>Browsing Page</h1>
       <div className="container-app">
       
 
         <div className="container-display">
 
-        
-    
-      
-       
-      <div className="values" >
-            <button
-            className="buttonClass"
-            onClick={() => navigate('/browser')}
-            >
-            Browser
-            </button>
-            </div>
+        <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}> 
+        <p>Outer Corner to Pupil Center - Left Eye: <span id="innerCornerLeftEye"></span></p>
+        <p>Inner Corner to Pupil Center - Left Eye: <span id="outerCornerLeftEye"></span></p>
+      </div>
+      <div  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}><p>Application <span id="positionIndicator"></span></p></div>
 
+        {/* Display the current input */}
+      <p>Text: {input}</p>
+      
             
-            <div className="values1" >
-            <button
-            className="buttonClass1"
-            onClick={() => navigate('/communication')}
-            >
-            Communication
-            </button>
-            <button className="buttonClass1"
-              onClick={() => navigate('/gaming')}
-                
-              >Gaming
-              </button>
-            </div>
+     
+      <div>
+      
+        <Keyboard
+         
+          
+        />
+     
+    </div>
+
+    
+
+
+
           <div className="container-video">
             <Webcam
               ref={webcamRef}
@@ -553,8 +573,9 @@ const WebcamImg = () => {
           </div>
         </div>
       </div>
+      </div>
     </Fragment>
   );
 };
 
-export default WebcamImg;
+export default Key8;
